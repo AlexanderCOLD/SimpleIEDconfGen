@@ -1,0 +1,670 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SCL xmlns="http://www.iec.ch/61850/2006/SCL">
+  <Header id="" version="4.0.7" revision="" nameStructure="VIED" />
+  <Communication>
+    <SubNetwork name="subnetwork1" type="8-MMS">
+      <Text>Name-HERE</Text>
+      <BitRate unit="b/s">10</BitRate>
+      <ConnectedAP iedName="ied1" apName="accessPoint1">
+        <Address>
+          <P type="IP">IPADDR-HERE</P>
+          <P type="IP-SUBNET">255.255.255.0</P>
+          <P type="IP-GATEWAY">192.168.0.0</P>
+          <P type="OSI-TSEL">0001</P>
+          <P type="OSI-PSEL">00000001</P>
+          <P type="OSI-SSEL">0001</P>
+          <P type="HMI-Port">80</P>
+		  <P type="MMS-Port">102</P>
+		  <P type="FTP-Port">5077</P>
+		  <P type="FTP-User">admin</P>
+		  <P type="FTP-Passwd">admin</P>
+		  <P type="FTP-Dir">Comtrade</P>
+        </Address>
+        <GSE ldInst="lDevice1" cbName="gcbProtection">
+          <Address>
+            <P type="VLAN-ID">001</P>
+            <P type="VLAN-PRIORITY">4</P>
+            <P type="MAC-Address">MAC-DST-TRIP-HERE</P>
+            <P type="APPID">0001</P>
+            <P type="IFACE">ens3</P>
+			<P type="MAC-Source">MAC-SRC-HERE</P>
+			<P type="GoCbRef">ied1lDevice1/LLN0.gcbProtection</P>
+			<P type="GoID">protectionID</P>
+          </Address>
+          <MinTime unit="s" multiplier="m">4</MinTime>
+          <MaxTime unit="s" multiplier="m">2000</MaxTime>
+        </GSE>
+        <GSE ldInst="lDevice1" cbName="gcbBreakerState">
+          <Address>
+            <P type="VLAN-ID">001</P>
+            <P type="VLAN-PRIORITY">4</P>
+            <P type="MAC-Address">MAC-DST-BRSTATE-HERE</P>
+            <P type="APPID">0001</P>
+            <P type="IFACE">ens3</P>
+			<P type="MAC-Source">MAC-SRC-HERE</P>
+			<P type="GoCbRef">ied1lDevice1/LLN0.gcbBreakerState</P>
+			<P type="GoID">breakerStateID</P>
+          </Address>
+          <MinTime unit="s" multiplier="m">4</MinTime>
+          <MaxTime unit="s" multiplier="m">2000</MaxTime>
+        </GSE>
+		INPUT-BLOCK-HERE
+      </ConnectedAP>
+    </SubNetwork>
+  </Communication>
+  <IED name="ied1">
+	<Text source="name">Name-HERE</Text>
+    <Services>
+      <DynAssociation />
+      <GetDirectory />
+      <GetDataObjectDefinition />
+      <GetDataSetValue />
+      <DataSetDirectory />
+      <ReadWrite />
+      <GetCBValues />
+      <ConfLNs fixPrefix="true" fixLnInst="true" />
+      <GOOSE max="5" />
+      <GSSE max="5" />
+      <FileHandling type ="tServiceYesNo" minOccurs="0" />
+      <GSEDir />
+      <TimerActivatedControl />
+    </Services>
+    <AccessPoint name="accessPoint1">
+      <Server>
+        <Authentication />
+        <LDevice inst="lDevice1">
+		
+		<!-- Нулевой узел -->
+			
+          <LN0 lnClass="LLN0" lnType="LLN01" inst="">	
+		  
+		  <!-- Настройки GOOSE -->
+		  
+		  	<DataSet name="ProtectionDS">
+              <FCDA ldInst="lDevice1" lnClass="PTOC" lnInst="1" doName="Op" daName="general" fc="ST" />
+			  <FCDA ldInst="lDevice1" lnClass="PTOC" lnInst="1" doName="Op" daName="phsA" fc="ST" />
+			  <FCDA ldInst="lDevice1" lnClass="PTOC" lnInst="1" doName="Op" daName="phsB" fc="ST" />
+			  <FCDA ldInst="lDevice1" lnClass="PTOC" lnInst="1" doName="Op" daName="phsC" fc="ST" />
+            </DataSet>
+
+            <DataSet name="BreakerStateDS">
+			  <FCDA ldInst="lDevice1" lnClass="CSWI" lnInst="2" doName="Pos" daName="ctlVal" fc="CO" />
+            </DataSet>
+
+			INPUTS-HERE
+		    <GSEControl name="gcbProtection" datSet="ProtectionDS" confRev="1" appID="4000" />
+		    <GSEControl name="gcbBreakerState" datSet="BreakerStateDS" confRev="1" appID="4000" />
+
+		  <!-- Настройки MMS -->
+		  
+            <DataSet name="dataset1" desc="">
+              <FCDA ldInst="lDevice1" lnClass="MMXU" fc="MX" lnInst="1" doName="TotW" />
+			  <FCDA ldInst="lDevice1" lnClass="MMXU" fc="MX" lnInst="1" doName="TotVar" />
+			  <FCDA ldInst="lDevice1" lnClass="MMXU" fc="MX" lnInst="1" doName="TotVA" />
+			  <FCDA ldInst="lDevice1" lnClass="MMXU" fc="MX" lnInst="1" doName="TotPF" />
+			  <FCDA ldInst="lDevice1" lnClass="MMXU" fc="MX" lnInst="1" doName="W" />
+			  <FCDA ldInst="lDevice1" lnClass="MMXU" fc="MX" lnInst="1" doName="VAr" />
+			  <FCDA ldInst="lDevice1" lnClass="MMXU" fc="MX" lnInst="1" doName="VA" />
+			  <FCDA ldInst="lDevice1" lnClass="MMXU" fc="MX" lnInst="1" doName="PF" />
+			  <FCDA ldInst="lDevice1" lnClass="MMXU" fc="MX" lnInst="1" doName="Z" />
+			  <FCDA ldInst="lDevice1" lnClass="MMXU" fc="MX" lnInst="1" doName="Hz" />
+			  <FCDA ldInst="lDevice1" lnClass="MMXU" fc="MX" lnInst="1" doName="PPV" />
+			  <FCDA ldInst="lDevice1" lnClass="MMXU" fc="MX" lnInst="1" doName="PhV" />
+			  <FCDA ldInst="lDevice1" lnClass="MMXU" fc="MX" lnInst="1" doName="A" />
+			  <FCDA ldInst="lDevice1" lnClass="PTOC" fc="MX" lnInst="1" />
+            </DataSet>
+			
+            <ReportControl name="brcb" confRev="0" datSet="dataset1" rptID="brcb" intgPd="5000" buffered="true" bufTime="100" >
+              <TrgOps dchg="true" qchg="true" dupd="true" period="true" gi="true" />
+              <OptFields dataSet="true" bufOvfl="false" configRef="true" dataRef="false" entryID="true" timeStamp="true" seqNum="true"/>
+              <RptEnabled max="1"/>
+            </ReportControl>
+			
+            <ReportControl name="urcb" confRev="0" datSet="dataset1" intgPd="0" bufTime="0">
+              <TrgOps dchg="true" qchg="true" dupd="true" period="true" gi="true" />
+              <OptFields dataSet="true" bufOvfl="false" configRef="true" dataRef="false" entryID="true" timeStamp="true" seqNum="true"/>
+            </ReportControl>
+            
+			
+			<!-- Настройки симуляции -->
+
+			<Private type="Setting" source="ied1/lDevice1/SVCB1/AmpUa">Voltage-HERE</Private>   <!-- Напряжение фазы "А", (А) в нормальном режиме -->
+			<Private type="Setting" source="ied1/lDevice1/SVCB1/AmpUb">Voltage-HERE</Private>   <!-- Напряжение фазы "B", (А) в нормальном режиме -->
+			<Private type="Setting" source="ied1/lDevice1/SVCB1/AmpUc">Voltage-HERE</Private>   <!-- напряжение фазы "C", (А) в нормальном режиме -->
+			
+			<Private type="Setting" source="ied1/lDevice1/SVCB1/AmpIa">Current-HERE</Private>     <!-- Ток фазы "А", (В) в нормальном режиме -->
+			<Private type="Setting" source="ied1/lDevice1/SVCB1/AmpIb">Current-HERE</Private>     <!-- Ток фазы "B", (В) в нормальном режиме -->
+			<Private type="Setting" source="ied1/lDevice1/SVCB1/AmpIc">Current-HERE</Private>     <!-- Ток фазы "C", (В) в нормальном режиме -->
+
+			<Private type="Setting" source="ied1/lDevice1/SVCB1/cosPhi">Cos-Here</Private>   <!-- Косинус "Фи" в нормальном режиме -->
+			<Private type="Setting" source="ied1/lDevice1/SVCB1/step">1</Private>        <!-- Частота симуляции, (мс) (1 мс в реальных терминалах) -->
+			<Private type="Setting" source="ied1/lDevice1/SVCB1/noise">0.002</Private>   <!-- Уровень помех в сигналах -->
+			
+			<Private type="Setting" source="ied1/lDevice1/SVCB1/Ku">0.5</Private>        <!-- Падение напряжения, (о.е.) в аварийном режиме -->
+			<Private type="Setting" source="ied1/lDevice1/SVCB1/Ki">5.0</Private>        <!-- Увелчение тока "о.е.", в аварийном режиме -->
+			<Private type="Setting" source="ied1/lDevice1/SVCB1/Aper">2.0</Private>      <!-- Бросок Апер. состовл. (Max) "о.е.", в аварийном режиме -->
+			<Private type="Setting" source="ied1/lDevice1/SVCB1/Duration">1000</Private> <!-- Длительность аварийного режима (мс) -->
+
+			<!-- Уставки -->
+			
+			<Private type="Setting" source="ied1/lDevice1/PTOC1/StrVal/setVal">TripPoint-HERE</Private>    <!-- Уставка по току МТЗ (А) -->
+			<Private type="Setting" source="ied1/lDevice1/PTOC1/OpDlTmms/setVal">500</Private>  <!-- Уставка по времени МТЗ (мс) -->
+			
+			<Private type="Setting" source="ied1/lDevice1/CILO1/EnaOpn/stVal">false</Private>      <!-- Включить блокировку -->
+			<Private type="Setting" source="ied1/lDevice1/CILO1/EnaCls/stVal">false</Private>      <!-- Включить блокировку -->
+			
+			
+			
+			<Private type="Setting" source="ied1/lDevice1/CSWI1/Pos/stVal">2</Private>       <!-- СШ -->
+			<Private type="Setting" source="ied1/lDevice1/CSWI1/Pos/ctlVal">true</Private>   <!-- СШ -->
+			
+			<Private type="Setting" source="ied1/lDevice1/CSWI2/Pos/stVal">2</Private>       <!-- Фидер -->
+			<Private type="Setting" source="ied1/lDevice1/CSWI2/Pos/ctlVal">true</Private>   <!-- Фидер -->
+			
+			<Private type="Setting" source="ied1/lDevice1/CSWI3/Pos/stVal">1</Private>       <!-- ЗН -->
+			<Private type="Setting" source="ied1/lDevice1/CSWI3/Pos/ctlVal">false</Private>  <!-- ЗН -->
+			
+			<Private type="Setting" source="ied1/lDevice1/CSWI4/Pos/stVal">2</Private>       <!-- Тележка -->
+			<Private type="Setting" source="ied1/lDevice1/CSWI4/Pos/ctlVal">true</Private>   <!-- Тележка -->
+			
+			
+			
+			<Private type="Setting" source="ied1/lDevice1/XCBR1/switchOnDelay">200</Private>      <!-- Время включения СШ -->
+			<Private type="Setting" source="ied1/lDevice1/XCBR1/switchOffDelay">50</Private>      <!-- Время выключения СШ -->
+
+			<Private type="Setting" source="ied1/lDevice1/XCBR2/switchOnDelay">200</Private>      <!-- Время включения фидера -->
+			<Private type="Setting" source="ied1/lDevice1/XCBR2/switchOffDelay">50</Private>      <!-- Время выключения фидера -->
+
+			<Private type="Setting" source="ied1/lDevice1/XSWI1/switchOnDelay">200</Private>      <!-- Время включения ЗН -->
+			<Private type="Setting" source="ied1/lDevice1/XSWI1/switchOffDelay">50</Private>      <!-- Время выключения ЗН -->
+			
+			<Private type="Setting" source="ied1/lDevice1/SVCB1/scDur">0</Private>    <!-- Тестовое КЗ, периодичность в сек (0 откоючено) -->
+			<Private type="Setting" source="ied1/lDevice1/SVCB1/scType">AB</Private>  <!-- Тестовое КЗ, тип: A/B/C/AB/BC/CA (ABC если не задано) -->
+			
+			<!-- Осциллограммы -->
+
+			<Private type="Setting" source="ied1/lDevice1/RDRE1/PreTmms/setVal">1000</Private>   <!-- Время до запуска (мс) -->
+			<Private type="Setting" source="ied1/lDevice1/RDRE1/PstTmms/setVal">1000</Private>   <!-- Время после запуска (мс) -->
+			<Private type="Setting" source="ied1/lDevice1/RDRE1/MaxNumRcd/setVal">10</Private>   <!-- Максимальное количество осциллограмм -->		
+			
+			<Private type="OscillogramTrg" source="ied1/lDevice1/PTOC1/Op/general"></Private>	 <!-- Сигналы пуска -->
+
+			<Private type="Oscillogram" source="ied1/lDevice1/SVCB1/instUa/instMag"></Private>
+			<Private type="Oscillogram" source="ied1/lDevice1/SVCB1/instUb/instMag"></Private>
+			<Private type="Oscillogram" source="ied1/lDevice1/SVCB1/instUc/instMag"></Private>			
+			<Private type="Oscillogram" source="ied1/lDevice1/SVCB1/instIa/instMag"></Private>
+			<Private type="Oscillogram" source="ied1/lDevice1/SVCB1/instIb/instMag"></Private>
+			<Private type="Oscillogram" source="ied1/lDevice1/SVCB1/instIc/instMag"></Private>
+
+			<Private type="Oscillogram" source="ied1/lDevice1/MMXU1/PhV/phsA/cVal/mag"></Private>
+			<Private type="Oscillogram" source="ied1/lDevice1/MMXU1/PhV/phsB/cVal/mag"></Private>
+			<Private type="Oscillogram" source="ied1/lDevice1/MMXU1/PhV/phsC/cVal/mag"></Private>			
+			<Private type="Oscillogram" source="ied1/lDevice1/MMXU1/A/phsA/cVal/mag"></Private>
+			<Private type="Oscillogram" source="ied1/lDevice1/MMXU1/A/phsB/cVal/mag"></Private>
+			<Private type="Oscillogram" source="ied1/lDevice1/MMXU1/A/phsC/cVal/mag"></Private>
+
+			<Private type="Oscillogram" source="ied1/lDevice1/PTOC1/Str/general"></Private>
+			<Private type="Oscillogram" source="ied1/lDevice1/PTOC1/Str/phsA"></Private>
+			<Private type="Oscillogram" source="ied1/lDevice1/PTOC1/Str/phsB"></Private>
+			<Private type="Oscillogram" source="ied1/lDevice1/PTOC1/Str/phsC"></Private>
+
+			<Private type="Oscillogram" source="ied1/lDevice1/PTOC1/Op/general"></Private>
+			<Private type="Oscillogram" source="ied1/lDevice1/PTOC1/Op/phsA"></Private>
+			<Private type="Oscillogram" source="ied1/lDevice1/PTOC1/Op/phsB"></Private>
+			<Private type="Oscillogram" source="ied1/lDevice1/PTOC1/Op/phsC"></Private>			
+			
+			<!-- Последовательность расчета -->
+			
+			<Private type="LNChain" source="ied1/lDevice1/SVCB1">ied1/lDevice1/MMXU1</Private>
+			<Private type="LNChain" source="ied1/lDevice1/SVCB1">ied1/lDevice1/LLN0</Private>
+			<Private type="LNChain" source="ied1/lDevice1/SVCB1">ied1/lDevice1/CILO1</Private>
+			<Private type="LNChain" source="ied1/lDevice1/SVCB1">ied1/lDevice1/CSWI1</Private>
+			<Private type="LNChain" source="ied1/lDevice1/SVCB1">ied1/lDevice1/CSWI2</Private>
+			<Private type="LNChain" source="ied1/lDevice1/SVCB1">ied1/lDevice1/CSWI3</Private>
+			<Private type="LNChain" source="ied1/lDevice1/SVCB1">ied1/lDevice1/CSWI4</Private>
+			<Private type="LNChain" source="ied1/lDevice1/SVCB1">ied1/lDevice1/XCBR1</Private>
+			<Private type="LNChain" source="ied1/lDevice1/SVCB1">ied1/lDevice1/XCBR2</Private>
+			<Private type="LNChain" source="ied1/lDevice1/SVCB1">ied1/lDevice1/XSWI1</Private>
+			<Private type="LNChain" source="ied1/lDevice1/SVCB1">ied1/lDevice1/XSWI2</Private>
+			<Private type="LNChain" source="ied1/lDevice1/SVCB1">ied1/lDevice1/RADR1</Private>
+			<Private type="LNChain" source="ied1/lDevice1/SVCB1">ied1/lDevice1/RBDR1</Private>
+			<Private type="LNChain" source="ied1/lDevice1/SVCB1">ied1/lDevice1/RDRE1</Private>
+			<Private type="LNChain" source="ied1/lDevice1/MMXU1">ied1/lDevice1/PTOC1</Private>
+			
+			<!-- Ссылки -->
+			
+			<Private type="Reference" source="ied1/lDevice1/SVCB1/instIa">ied1/lDevice1/MMXU1/instIa</Private>
+			<Private type="Reference" source="ied1/lDevice1/SVCB1/instIb">ied1/lDevice1/MMXU1/instIb</Private>
+			<Private type="Reference" source="ied1/lDevice1/SVCB1/instIc">ied1/lDevice1/MMXU1/instIc</Private>
+			<Private type="Reference" source="ied1/lDevice1/SVCB1/instUa">ied1/lDevice1/MMXU1/instUa</Private>
+			<Private type="Reference" source="ied1/lDevice1/SVCB1/instUb">ied1/lDevice1/MMXU1/instUb</Private>
+			<Private type="Reference" source="ied1/lDevice1/SVCB1/instUc">ied1/lDevice1/MMXU1/instUc</Private>
+			<Private type="Reference" source="ied1/lDevice1/MMXU1/A">ied1/lDevice1/PTOC1/A</Private>	
+			
+			<Private type="Reference" source="ied1/lDevice1/CSWI1/Pos/Oper/ctlVal">ied1/lDevice1/CSWI1/Pos/ctlVal</Private>		
+			<Private type="Reference" source="ied1/lDevice1/CSWI1/Pos">ied1/lDevice1/CSWI1/PosA</Private>	
+			<Private type="Reference" source="ied1/lDevice1/CSWI1/Pos">ied1/lDevice1/CSWI1/PosB</Private>	
+			<Private type="Reference" source="ied1/lDevice1/CSWI1/Pos">ied1/lDevice1/CSWI1/PosC</Private>	
+			<Private type="Reference" source="ied1/lDevice1/CSWI1/Pos">ied1/lDevice1/XCBR1/Pos</Private>
+			
+			<Private type="Reference" source="ied1/lDevice1/CSWI2/Pos/Oper/ctlVal">ied1/lDevice1/CSWI2/Pos/ctlVal</Private>
+			<Private type="Reference" source="ied1/lDevice1/CSWI2/Pos">ied1/lDevice1/CSWI2/PosA</Private>
+			<Private type="Reference" source="ied1/lDevice1/CSWI2/Pos">ied1/lDevice1/CSWI2/PosB</Private>
+			<Private type="Reference" source="ied1/lDevice1/CSWI2/Pos">ied1/lDevice1/CSWI2/PosC</Private>
+			<Private type="Reference" source="ied1/lDevice1/CSWI2/Pos">ied1/lDevice1/XCBR2/Pos</Private>
+
+			<Private type="Reference" source="ied1/lDevice1/CSWI2/Pos">ied1/lDevice1/PTOC1/Pos</Private>
+
+			<Private type="Reference" source="ied1/lDevice1/CSWI3/Pos/Oper/ctlVal">ied1/lDevice1/CSWI3/Pos/ctlVal</Private>
+			<Private type="Reference" source="ied1/lDevice1/CSWI3/Pos">ied1/lDevice1/CSWI3/PosA</Private>
+			<Private type="Reference" source="ied1/lDevice1/CSWI3/Pos">ied1/lDevice1/CSWI3/PosB</Private>
+			<Private type="Reference" source="ied1/lDevice1/CSWI3/Pos">ied1/lDevice1/CSWI3/PosC</Private>
+			<Private type="Reference" source="ied1/lDevice1/CSWI3/Pos">ied1/lDevice1/XSWI1/Pos</Private>
+
+			<Private type="Reference" source="ied1/lDevice1/CSWI4/Pos/Oper/ctlVal">ied1/lDevice1/CSWI4/Pos/ctlVal</Private>
+			<Private type="Reference" source="ied1/lDevice1/CSWI4/Pos">ied1/lDevice1/CSWI4/PosA</Private>
+			<Private type="Reference" source="ied1/lDevice1/CSWI4/Pos">ied1/lDevice1/CSWI4/PosB</Private>
+			<Private type="Reference" source="ied1/lDevice1/CSWI4/Pos">ied1/lDevice1/CSWI4/PosC</Private>
+			<Private type="Reference" source="ied1/lDevice1/CSWI4/Pos">ied1/lDevice1/XSWI2/Pos</Private>
+			
+			<Private type="Reference" source="ied1/lDevice1/CILO1/EnaOpn">ied1/lDevice1/XSWI1/EnaOpn</Private>
+			<Private type="Reference" source="ied1/lDevice1/CILO1/EnaCls">ied1/lDevice1/XSWI1/EnaCls</Private>
+	
+			<Private type="Reference" source="ied1/lDevice1/CILO1/EnaOpn">ied1/lDevice1/XSWI2/EnaOpn</Private>
+			<Private type="Reference" source="ied1/lDevice1/CILO1/EnaCls">ied1/lDevice1/XSWI2/EnaCls</Private>
+	
+			<Private type="Reference" source="ied1/lDevice1/XCBR1/Pos/stVal">ied1/lDevice1/SVCB1/headBreaker</Private>
+			<Private type="Reference" source="ied1/lDevice1/XCBR2/Pos/stVal">ied1/lDevice1/SVCB1/breaker</Private>
+			
+			<Private type="Reference" source="ied1/lDevice1/MMXU1/A">ied1/lDevice1/XSWI1/A</Private>
+			<Private type="Reference" source="ied1/lDevice1/MMXU1/A">ied1/lDevice1/XSWI2/A</Private>
+			
+			<Private type="Reference" source="ied1/lDevice1/XSWI1/Pos/stVal">ied1/lDevice1/XCBR2/grBreaker</Private>
+			<Private type="Reference" source="ied1/lDevice1/XSWI2/Pos/stVal">ied1/lDevice1/XCBR2/travelBreaker</Private>
+
+			<Private type="Reference" source="ied1/lDevice1/SVCB1/ShortCircuit">ied1/lDevice1/XCBR2/ShortCircuit</Private>
+			<Private type="Reference" source="ied1/lDevice1/SVCB1/ShortCircuit">ied1/lDevice1/XSWI1/ShortCircuit</Private>
+
+          </LN0>
+		   
+		  <!-- Перечень узлов -->
+		  
+		  <LN lnClass="SVCB" lnType="SVCB1" inst="1" prefix=""/>  <!-- Генератор сигналов -->
+		  <LN lnClass="PTOC" lnType="PTOC1" inst="1" prefix=""/>  <!-- МТЗ -->
+          <LN lnClass="MMXU" lnType="MMXU1" inst="1" prefix=""/>  <!-- Измерения -->
+		  
+		  <LN lnClass="RADR" lnType="RADR1" inst="1" prefix=""/>  <!-- Осциллограф -->
+		  <LN lnClass="RBDR" lnType="RBDR1" inst="1" prefix=""/>  <!-- Осциллограф -->
+		  <LN lnClass="RDRE" lnType="RDRE1" inst="1" prefix=""/>  <!-- Осциллограф -->
+		  
+		  <LN lnClass="CILO" lnType="CILO1" inst="1" prefix=""/>  <!-- Блокировка переключений -->
+		  
+          <LN lnClass="CSWI" lnType="CSWI1" inst="1" prefix=""/>  <!-- Контроль включателя СШ     (XCBR1) -->
+		  <LN lnClass="CSWI" lnType="CSWI1" inst="2" prefix=""/>  <!-- Контроль включателя фидера (XCBR2) -->
+		  <LN lnClass="CSWI" lnType="CSWI1" inst="3" prefix=""/>  <!-- Контроль ЗН                (XSWI1) -->
+		  <LN lnClass="CSWI" lnType="CSWI1" inst="4" prefix=""/>  <!-- Контроль выкатной тележки  (XSWI2) -->
+		  
+		  <LN lnClass="XCBR" lnType="XCBR1" inst="1" prefix=""/>  <!-- Выключатель СШ -->
+		  <LN lnClass="XCBR" lnType="XCBR1" inst="2" prefix=""/>  <!-- Выключатель фидера -->
+		  <LN lnClass="XSWI" lnType="XSWI1" inst="1" prefix=""/>  <!-- Заземляющие ножи -->
+		  <LN lnClass="XSWI" lnType="XSWI1" inst="2" prefix=""/>  <!-- Выкатная тележка -->
+		  
+        </LDevice>
+      </Server>
+    </AccessPoint>
+  </IED>
+  
+  
+  <DataTypeTemplates>
+  
+	<!-- Описание узлов -->
+  
+    <LNodeType id="LLN01" lnClass="LLN0">
+      <DO name="Mod" type="INC1" />
+      <DO name="Beh" type="INS1" />
+      <DO name="Health" type="INS1" />
+      <DO name="NamPlt" type="LPL1" />
+    </LNodeType>
+	<LNodeType id="PTOC1" lnClass="PTOC">
+      <DO name="Mod" type="INC1" />
+      <DO name="Beh" type="INS1" />
+      <DO name="Health" type="INS1" />
+	  <DO name="NamPlt" type="LPL1" />
+	  <DO name="Str" type="ACD1" />
+	  <DO name="Op" type="ACT1" />
+	  <DO name="StrVal" type="ASG1" />
+	  <DO name="OpDlTmms" type="ING1" />
+	  <DO name="TmMult" type="ASG1" />
+	  <DO name="MinOpTmms" type="ING1" />
+	  <DO name="MaxOpTmms" type="ING1" />
+	  <DO name="TypRsCrv" type="ING1" />
+	  <DO name="RsDlTmms" type="ING1" />
+	  <DO name="DirMod" type="ING1" />
+    </LNodeType>
+    <LNodeType id="SVCB1" lnClass="SVCB" >
+      <DO name="Mod" type="INC1" />
+      <DO name="Beh" type="INS1" />
+      <DO name="Health" type="INS1" />
+	  <DO name="NamPlt" type="LPL1" />
+	  <DO name="ShortCircuit" type="SCMOD1" />
+    </LNodeType>
+    <LNodeType id="MMXU1" lnClass="MMXU">
+      <DO name="Mod" type="INC1" />
+      <DO name="Beh" type="INS1" />
+      <DO name="Health" type="INS1" />
+      <DO name="NamPlt" type="LPL1" />
+      <DO name="TotW" type="MV1" />
+	  <DO name="TotVar" type="MV1" />
+	  <DO name="TotVA" type="MV1" />
+	  <DO name="TotPF" type="MV1" />
+	  <DO name="Hz" type="MV1" />
+      <DO name="W" type="WYE1" />
+	  <DO name="VAr" type="WYE1" />
+	  <DO name="VA" type="WYE1" />
+	  <DO name="PF" type="WYE1" />
+	  <DO name="Z" type="WYE1" />
+	  <DO name="PhV" type="WYE1" />
+	  <DO name="PPV" type="DEL1" />
+	  <DO name="A" type="WYE1" />
+    </LNodeType>
+    <LNodeType id="CSWI1" lnClass="CSWI" desc="Switch controller">
+      <DO name="Mod" type="INC1" />
+      <DO name="Beh" type="INS1" />
+      <DO name="Health" type="INS1" />
+      <DO name="NamPlt" type="LPL1" />
+      <DO name="Pos" type="DPC1" />
+      <DO name="PosA" type="DPC1" />
+      <DO name="PosB" type="DPC1" />
+      <DO name="PosC" type="DPC1" />
+    </LNodeType>
+    <LNodeType id="CILO1" lnClass="CILO" >
+      <DO name="Mod" type="INC1" />
+      <DO name="Beh" type="INS1" />
+      <DO name="Health" type="INS1" />
+	  <DO name="NamPlt" type="LPL1" />
+      <DO name="EnaOpn" type="SPS1cilo" />
+      <DO name="EnaCls" type="SPS1cilo" />
+    </LNodeType>	
+    <LNodeType id="XCBR1" lnClass="XCBR" >
+      <DO name="Mod" type="INC1" />
+      <DO name="Beh" type="INS1" />
+      <DO name="Health" type="INS1" />
+	  <DO name="NamPlt" type="LPL1" />
+	  <DO name="EEName" type="DPL1" />
+      <DO name="EEHealth" type="INS1" />
+	  <DO name="Loc" type="SPS1" />
+	  <DO name="Pos" type="DPC1" />
+	  <DO name="BlkOpn" type="SPC1" />
+	  <DO name="BlkCls" type="SPC1" />
+	  <DO name="ChaMotEna" type="SPC1" />
+    </LNodeType>	
+    <LNodeType id="XSWI1" lnClass="XSWI" >
+      <DO name="Mod" type="INC1" />
+      <DO name="Beh" type="INS1" />
+      <DO name="Health" type="INS1" />
+	  <DO name="NamPlt" type="LPL1" />
+	  <DO name="EEName" type="DPL1" />
+      <DO name="EEHealth" type="INS1" />
+	  <DO name="Loc" type="SPS1" />
+	  <DO name="Pos" type="DPC1" />
+	  <DO name="BlkOpn" type="SPC1" />
+	  <DO name="BlkCls" type="SPC1" />
+	  <DO name="ChaMotEna" type="SPC1" />
+    </LNodeType>
+    <LNodeType id="RADR1" lnClass="RADR" >
+      <DO name="Mod" type="INC1" />
+      <DO name="Beh" type="INS1" />
+      <DO name="Health" type="INS1" /> 
+	  <DO name="NamPlt" type="LPL1" />
+	  <DO name="OpCntRs" type="INC1" />
+      <DO name="ChTrg" type="SPS1" />
+	  <DO name="ChNum" type="ING1" />
+	  <DO name="TrgMod" type="ING1" />
+	  <DO name="LevMod" type="ING1" />
+	  <DO name="HiTrgLev" type="ASG1" />
+	  <DO name="LoTrgLev" type="ASG1" />
+	  <DO name="PreTmms" type="ING1" />
+	  <DO name="PstTmms" type="ING1" />
+    </LNodeType>	
+	<LNodeType id="RBDR1" lnClass="RBDR" >
+      <DO name="Mod" type="INC1" />
+      <DO name="Beh" type="INS1" />
+      <DO name="Health" type="INS1" /> 
+	  <DO name="NamPlt" type="LPL1" />
+	  <DO name="OpCntRs" type="INC1" />
+      <DO name="ChTrg" type="SPS1" />
+	  <DO name="ChNum" type="ING1" />
+	  <DO name="TrgMod" type="ING1" />
+	  <DO name="LevMod" type="ING1" />
+	  <DO name="PreTmms" type="ING1" />
+	  <DO name="PstTmms" type="ING1" />
+    </LNodeType>
+    <LNodeType id="RDRE1" lnClass="RDRE" >
+      <DO name="Mod" type="INC1" />
+      <DO name="Beh" type="INS1" />
+      <DO name="Health" type="INS1" /> 
+	  <DO name="NamPlt" type="LPL1" />
+	  <DO name="OpCntRs" type="INC1" />
+      <DO name="RcdMade" type="SPS1" />
+	  <DO name="FltNum" type="INS1" />
+	  <DO name="GriFltNum" type="INS1" />
+	  <DO name="RcdStr" type="SPS1" />
+	  <DO name="MemUsed" type="INS1" />
+	  <DO name="TrgMod" type="ING1" />
+	  <DO name="LevMod" type="ING1" />
+	  <DO name="PreTmms" type="ING1" />
+	  <DO name="PstTmms" type="ING1" />
+	  <DO name="MemFull" type="ING1" />
+	  <DO name="MaxNumRcd" type="ING1" />
+	  <DO name="ReTrgMod" type="ING1" />
+	  <DO name="PerTrgTms" type="ING1" />
+	  <DO name="ExclTmms" type="ING1" />
+	  <DO name="OpMod" type="ING1" />
+    </LNodeType>
+	
+	<!-- Перечень объектов -->
+	
+    <DOType id="INC1" cdc="INC">
+      <DA name="q" bType="Quality" fc="ST" qchg="true" />
+      <DA name="t" bType="Timestamp" fc="ST" />
+      <DA name="ctlModel" type="CtlModels" bType="Enum" fc="CF" />
+	  <DA name="stVal" bType="INT32" fc="ST" dchg="true" />
+    </DOType>
+	
+    <DOType id="INS1" cdc="INS">
+      <DA name="stVal" bType="INT32" fc="ST" dchg="true" />
+      <DA name="q" bType="Quality" fc="ST" qchg="true" />
+      <DA name="t" bType="Timestamp" fc="ST" />
+    </DOType>
+
+    <DOType id="SPC1" cdc="SPC">
+	  <DA name="stVal" type="StVals" bType="Enum" fc="CF" />
+      <DA name="q" bType="Quality" fc="ST" qchg="true" />
+      <DA name="t" bType="Timestamp" fc="ST" />
+	  <DA name="ctlModel" type="CtlModels" bType="Enum" fc="CF" />
+	  <DA name="sboTimeout" bType="INT32U" fc="CF" />
+    </DOType>
+
+    <DOType id="DPL1" cdc="DPL">
+      <DA name="vendor" bType="VisString255" fc="DC" />
+	  <DA name="hwRev" bType="VisString255" fc="DC" />
+      <DA name="swRev" bType="VisString255" fc="DC" />
+      <DA name="serNum" bType="VisString255" fc="DC" />
+      <DA name="model" bType="VisString255" fc="DC" />
+      <DA name="location" bType="VisString255" fc="DC" />
+	  <DA name="cdcNs" bType="VisString255" fc="EX" />
+	  <DA name="cdcName" bType="VisString255" fc="EX" />
+	  <DA name="dataNs" bType="VisString255" fc="EX" />
+    </DOType>
+	
+    <DOType id="LPL1" cdc="LPL">
+      <DA name="vendor" bType="VisString255" fc="DC" />
+      <DA name="swRev" bType="VisString255" fc="DC" />
+      <DA name="d" bType="VisString255" fc="DC" />
+      <DA name="configRev" bType="VisString255" fc="DC" />
+    </DOType>
+	
+    <DOType id="DPC1" cdc="DPC">
+	  <DA name="ctlVal" bType="BOOLEAN" fc="CO" qchg="true" />
+	  <DA name="stVal" type="StVals" bType="Enum" fc="ST" />
+	  <DA name="testVal" bType="BOOLEAN" fc="CO" qchg="true" />
+      <DA name="q" bType="Quality" fc="ST" qchg="true" />
+      <DA name="t" bType="Timestamp" fc="ST" />
+      <DA name="ctlModel" type="CtlModels" bType="Enum" fc="CF" />
+      <DA name="sboTimeout" bType="INT32U" fc="CF" />
+      <DA name="SBO" bType="VisString64" fc="CO" />
+	  <DA name="SBOw" type="DPCSelectWithValue1" bType="Struct" fc="CO" />
+      <DA name="Oper" type="DPCOperate1" bType="Struct" fc="CO" />
+      <DA name="Cancel" type="DPCCancel1" bType="Struct" fc="CO" />
+    </DOType>
+
+    <DOType id="MV1" cdc="MV">
+      <DA name="mag" bType="FLOAT32" fc="MX" dchg="true" dupd="true" />
+      <DA name="q" bType="Quality" fc="MX" qchg="true" />
+      <DA name="t" bType="Timestamp" fc="MX" />
+    </DOType>
+	
+    <DOType id="WYE1" cdc="WYE">
+      <SDO name="phsA" type="CMV1" />
+      <SDO name="phsB" type="CMV1" />
+      <SDO name="phsC" type="CMV1" />
+    </DOType>
+	
+	<DOType id="DEL1" cdc="DEL">
+      <SDO name="phsAB" type="CMV1" />
+      <SDO name="phsBC" type="CMV1" />
+      <SDO name="phsCA" type="CMV1" />
+    </DOType>
+	
+    <DOType id="CMV1" cdc="CMV">
+	  <DA name="cVal" type="Vector1" bType="Struct" fc="MX" dchg="true" />
+      <DA name="q" bType="Quality" fc="MX" qchg="true" />
+      <DA name="t" bType="Timestamp" fc="MX" />
+    </DOType>	
+
+    <DOType id="ASG1" cdc="ASG">
+      <DA name="setVal" bType="FLOAT32" fc="SP" />
+    </DOType>
+	
+    <DOType id="ING1" cdc="ING">
+	  <DA name="setVal" bType="INT32" fc="SP" />
+    </DOType>
+
+    <DOType id="ACD1" cdc="ACD">	
+      <DA name="general" bType="BOOLEAN" fc="ST" dchg="true" />
+	  <DA name="dirGeneral" bType="INT32" fc="ST" dchg="true" />
+	  <DA name="phsA" bType="BOOLEAN" fc="ST" dchg="true" />
+	  <DA name="dirPhsA" bType="INT32" fc="ST" dchg="true" />
+	  <DA name="phsB" bType="BOOLEAN" fc="ST" dchg="true" />
+	  <DA name="dirPhsB" bType="INT32" fc="ST" dchg="true" />
+	  <DA name="phsC" bType="BOOLEAN" fc="ST" dchg="true" />
+	  <DA name="dirPhsC" bType="INT32" fc="ST" dchg="true" />
+	  <DA name="neut" bType="BOOLEAN" fc="ST" dchg="true" />
+	  <DA name="dirNeut" bType="INT32" fc="ST" dchg="true" />
+	  <DA name="q" bType="Quality" fc="MX" qchg="true" />
+      <DA name="t" bType="Timestamp" fc="MX" />
+    </DOType>
+	
+    <DOType id="ACT1" cdc="ACT">
+      <DA name="general" bType="BOOLEAN" fc="ST" dchg="true" />
+ 	  <DA name="phsA" bType="BOOLEAN" fc="ST" dchg="true" />
+	  <DA name="phsB" bType="BOOLEAN" fc="ST" dchg="true" />
+	  <DA name="phsC" bType="BOOLEAN" fc="ST" dchg="true" />
+	  <DA name="neut" bType="BOOLEAN" fc="ST" dchg="true" />
+	  <DA name="q" bType="Quality" fc="MX" qchg="true" />
+      <DA name="t" bType="Timestamp" fc="MX" />
+    </DOType>
+	
+	<DOType id="SPS1" cdc="SPS">
+	  <DA name="stVal" bType="BOOLEAN" fc="ST" dchg="true" />
+      <DA name="q" bType="Quality" fc="MX" qchg="true" />
+      <DA name="t" bType="Timestamp" fc="MX" />
+    </DOType>
+
+	<DOType id="SPS1cilo" cdc="SPS">
+	  <DA name="stVal" bType="BOOLEAN" fc="SP" dchg="true" />
+      <DA name="q" bType="Quality" fc="MX" qchg="true" />
+      <DA name="t" bType="Timestamp" fc="MX" />
+    </DOType>
+	
+	<!-- Перечень Атрибутов -->
+
+	
+    <DAType id="Vector1">
+      <BDA name="mag" bType="FLOAT32" />
+	  <BDA name="ang" bType="FLOAT32" />
+    </DAType>
+	
+    <DAType id="DPCSelectWithValue1">
+      <BDA name="ctlVal" bType="BOOLEAN" />
+      <BDA name="origin" type="Originator1" bType="Struct" />
+      <BDA name="ctlNum" bType="INT8U" />
+      <BDA name="T" bType="Timestamp" />
+      <BDA name="Test" bType="BOOLEAN" />
+      <BDA name="Check" bType="Check" />
+    </DAType>
+	
+    <DAType id="Originator1">
+      <BDA name="orCat" type="OrCat" bType="Enum" />
+      <BDA name="orIdent" bType="Octet64" />
+    </DAType>
+	
+    <DAType id="DPCOperate1">
+      <BDA name="ctlVal" bType="BOOLEAN" />
+      <BDA name="origin" type="Originator1" bType="Struct" />
+      <BDA name="ctlNum" bType="INT8U" />
+      <BDA name="T" bType="Timestamp" />
+      <BDA name="Test" bType="BOOLEAN" />
+      <BDA name="Check" bType="Check" />
+    </DAType>
+	
+    <DAType id="DPCCancel1">
+      <BDA name="ctlVal" bType="BOOLEAN" />
+      <BDA name="origin" type="Originator1" bType="Struct" />
+      <BDA name="ctlNum" bType="INT8U" />
+      <BDA name="T" bType="Timestamp" />
+      <BDA name="Test" bType="BOOLEAN" />
+    </DAType>
+	
+	<!-- Симуляция КЗ -->
+	
+	<DOType id="SCMOD1" cdc="SCMOD">
+      <DA name="A" bType="BOOLEAN" fc="SP" />
+	  <DA name="B" bType="BOOLEAN" fc="SP" />
+	  <DA name="C" bType="BOOLEAN" fc="SP" />
+	  <DA name="AB" bType="BOOLEAN" fc="SP" />
+	  <DA name="BC" bType="BOOLEAN" fc="SP" />
+	  <DA name="CA" bType="BOOLEAN" fc="SP" />
+	  <DA name="ABC" bType="BOOLEAN" fc="SP" />
+    </DOType>
+	
+	
+	<!-- Перечень Перечислений -->
+	
+    <EnumType id="CtlModels">
+      <EnumVal ord="0">status-only</EnumVal>
+      <EnumVal ord="1">direct-with-normal-security</EnumVal>
+      <EnumVal ord="2">sbo-with-normal-security</EnumVal>
+      <EnumVal ord="3">direct-with-enhanced-security</EnumVal>
+      <EnumVal ord="4">sbo-with-enhanced-security</EnumVal>
+    </EnumType>
+    <EnumType id="OrCat">
+      <EnumVal ord="0">not-supported</EnumVal>
+      <EnumVal ord="1">bay-control</EnumVal>
+      <EnumVal ord="2">station-control</EnumVal>
+      <EnumVal ord="3">remote-control</EnumVal>
+      <EnumVal ord="4">automatic-bay</EnumVal>
+      <EnumVal ord="5">automatic-station</EnumVal>
+      <EnumVal ord="6">automatic-remote</EnumVal>
+      <EnumVal ord="7">maintenance</EnumVal>
+      <EnumVal ord="8">process</EnumVal>
+    </EnumType>
+    <EnumType id="StVals">
+      <EnumVal ord="0">intermediate-state</EnumVal>
+      <EnumVal ord="1">off</EnumVal>
+      <EnumVal ord="2">on</EnumVal>
+      <EnumVal ord="3">bad-state</EnumVal>
+    </EnumType>	
+	
+  </DataTypeTemplates>
+</SCL>
