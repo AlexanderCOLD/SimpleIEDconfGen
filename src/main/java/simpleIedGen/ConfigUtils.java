@@ -41,10 +41,15 @@ public class ConfigUtils {
     public static List<ConfigState> loadConfigs() throws Exception {
         List<ConfigState> configs = new ArrayList<>();
 
-        File conf = new File("Конфиги.csv");
-        List<String> confData = FileUtils.readLines(conf, Charset.forName("CP1251")).subList(11, 91);
+        File conf = new File("Конфиги2.csv"); // Конфиги.csv
+        List<String> confData = FileUtils.readLines(conf, Charset.forName("CP1251")).subList(11, 29); //91
+
+        System.out.println("Параметры:  ");
+
         confData.forEach(s -> {
             String[] line = s.split(";");
+            System.out.println("   " + s);
+
 
             ConfigState state = new ConfigState();
             state.setName(line[3].trim());
@@ -65,19 +70,21 @@ public class ConfigUtils {
             configs.add(state);
         });
 
-        List<ConfigState> filled = configs.subList(0, 8);
-        List<ConfigState> nonFilled = configs.subList(8, 80);
+        System.out.println("");
 
-        int num = 0;
-        for(ConfigState cs: nonFilled){
-            ConfigState f = filled.get(num);
-            cs.setName(f.getName());
-            cs.setVoltage(f.getVoltage());
-            cs.setCurrent(f.getCurrent());
-            cs.setCos(f.getCos());
-            cs.setTripPoint(f.getTripPoint());
-            if(++num == 8) num = 0;
-        }
+//        List<ConfigState> filled = configs.subList(0, 8);
+//        List<ConfigState> nonFilled = configs.subList(8, 80);
+//
+//        int num = 0;
+//        for(ConfigState cs: nonFilled){
+//            ConfigState f = filled.get(num);
+//            cs.setName(f.getName());
+//            cs.setVoltage(f.getVoltage());
+//            cs.setCurrent(f.getCurrent());
+//            cs.setCos(f.getCos());
+//            cs.setTripPoint(f.getTripPoint());
+//            if(++num == 8) num = 0;
+//        }
 
         return configs;
     }

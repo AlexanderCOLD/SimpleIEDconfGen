@@ -64,7 +64,7 @@ public class Main {
                 .map(Path::toFile)
                 .collect(Collectors.toList());
 
-        int kmNum = 0; // Начинается с 204 адреса
+        int kmNum = 0; // Начинается с 202 адреса
 
         List<Controller> controllers = new ArrayList<>(); // key - old, value - new
 
@@ -89,6 +89,7 @@ public class Main {
                 /* Номер контроллера */
                 if(line.contains("SystNum")) {
                     line = String.format("      <SystNum>%s</SystNum>", kmNum);
+                    line = "      <SystNum>1</SystNum>"; // Костыль
                     controller.setNumber(kmNum);
                 }
 
@@ -115,6 +116,12 @@ public class Main {
                 if(line.contains(devAddr)) {
                     System.out.printf("   '-->  Адресс УСО КМ:  %s %n", rplDevAddr);
                     line = line.replace(devAddr, rplDevAddr);
+                }
+
+                /* Обновлять при изменении */
+                if(line.contains("<TransferType>1</TransferType>")) {
+                    System.out.println("   '-->  Обновление при изменении");
+                    line = line.replace("<TransferType>1</TransferType>", "<TransferType>2</TransferType>");
                 }
 
                 result.add(line);
